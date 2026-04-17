@@ -257,11 +257,32 @@
         .s-del-btn { background-color: #e74c3c; }
         .s-close-btn { background-color: #c0392b; border: 1px solid #ff7675; }
 
+        /* ستايل زر إخفاء وإظهار الشريط الجديد */
+        .toggle-header-btn {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 9999;
+            background-color: #34495e;
+            color: white;
+            border: 1px solid #fff;
+            padding: 6px 12px;
+            font-size: 13px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        .toggle-header-btn:hover { background-color: #2c3e50; }
+
     </style>
 <style>:is([id*='google_ads_iframe'],[id*='taboola-'],.taboolaHeight,.taboola-placeholder,#top-ad,#credential_picker_container,#credentials-picker-container,#credential_picker_iframe,[id*='google-one-tap-iframe'],#google-one-tap-popup-container,.google-one-tap__module,.google-one-tap-modal-div,#amp_floatingAdDiv,#ez-content-blocker-container) {display:none!important;min-height:0!important;height:0!important;}</style><style>:is([id*='google_ads_iframe'],[id*='taboola-'],.taboolaHeight,.taboola-placeholder,#top-ad,#credential_picker_container,#credentials-picker-container,#credential_picker_iframe,[id*='google-one-tap-iframe'],#google-one-tap-popup-container,.google-one-tap__module,.google-one-tap-modal-div,#amp_floatingAdDiv,#ez-content-blocker-container) {display:none!important;min-height:0!important;height:0!important;}</style></head>
 <body>
 
-    <div class="player-header">
+    <button id="toggleHeaderBtn" class="toggle-header-btn" onclick="toggleHeaderVisibility()">  🔼</button>
+
+    <div class="player-header" id="mainPlayerHeader" style="display: flex;">
         <div class="top-controls">
             <div style="display: flex; gap: 5px; flex-wrap: wrap;">
                 <button class="admin-btn" onclick="openModal()">⚙️ التعديل</button>
@@ -278,7 +299,7 @@
 
                 <button class="nav-btn" onclick="prevStream()">الســـــــــــــــــــابق ⏮️</button>
                 <button class="nav-btn" onclick="nextStream()">التـــــــــــــــــــــــــــــــــــــــــــــالي ⏭️</button>
-                <button class="rotate-btn" onclick="toggleRotation()">تدوير 🔄</button>
+                <button class="rotate-btn" onclick="toggleRotation()">تدوير 🔄</button><button id="adblockBtn" class="adblock-btn disabled" onclick="toggleAdBlock()">🛡️ المانع (مقفول)</button>
             </div>
 
             <button id="adblockBtn" class="adblock-btn" onclick="toggleAdBlock()">🛡️ المانع (شغال)</button>
@@ -336,11 +357,12 @@
 <button id="btn_new_1775908143682_1" class="tab-btn" data-link="https://985642.softstreamloft5.sbs/albaplayer/bein-2/" data-open="internal" onclick="playStream(this)">live 2</button>
 <button id="btn_new_1775908143682_2" class="tab-btn" data-link="https://eyj0exaioijkv1qilcjhbgcioijiuzi1nij99ds.yallashot.us/playerv3.php?match=match2&amp;key=c0ae1abba6eebd7e6cc5b88b1d2B71547" data-open="internal" onclick="playStream(this)">live 3</button>
 <button id="btn_new_1775908143682_3" class="tab-btn" data-link="https://tv25.koora-plus.top/chtv/ch2.php" data-open="internal" onclick="playStream(this)">live 4</button>
-<button id="btn_new_1775908143682_4" class="tab-btn" data-link="https://2.simosports.live/splayer/Live2.php" data-open="internal" onclick="playStream(this)">live 5</button></div>
+<button id="btn_new_1775908143682_4" class="tab-btn" data-link="https://2.simosports.live/splayer/Live2.php" data-open="internal" onclick="playStream(this)">live 5</button>
+</div>
     </div>
 
     <div class="video-wrapper">
-        <iframe id="iframePlayer" src="" allowfullscreen="" style="display: none;" sandbox="allow-scripts allow-same-origin"></iframe>
+        <iframe id="iframePlayer" src="" allowfullscreen="" style="display: none;"></iframe>
         <video id="videoPlayer" controls="" autoplay="" style="display: none;"></video>
     </div>
 
@@ -407,6 +429,19 @@
         let autoSkipTimer = null; 
         let autoSwitchInterval = null; 
         let activeLinkType = 'iframe'; // تتبع نوع المشغل الحالي
+
+        // الدالة الجديدة الخاصة بزر الإخفاء والإظهار
+        function toggleHeaderVisibility() {
+            let header = document.getElementById('mainPlayerHeader');
+            let btn = document.getElementById('toggleHeaderBtn');
+            if (header.style.display === 'none') {
+                header.style.display = 'flex';
+                btn.innerText = 'إخفاء الشريط 🔼';
+            } else {
+                header.style.display = 'none';
+                btn.innerText = 'إظهار الشريط 🔽';
+            }
+        }
 
         function toggleAutoSwitch() {
             let btn = document.getElementById('autoSwitchBtn');
